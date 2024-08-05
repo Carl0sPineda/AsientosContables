@@ -1,14 +1,26 @@
-import React from 'react'
-import {createRoot} from 'react-dom/client'
-import './style.css'
-import App from './App'
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import App from "./App";
+import "./style.css";
 
-const container = document.getElementById('root')
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * (60 * 1000), // 5 mins
+      gcTime: 10 * (60 * 1000), // 10 mins
+    },
+  },
+});
 
-const root = createRoot(container!)
+const container = document.getElementById("root");
+
+const root = createRoot(container!);
 
 root.render(
-    <React.StrictMode>
-        <App/>
-    </React.StrictMode>
-)
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </React.StrictMode>
+);
