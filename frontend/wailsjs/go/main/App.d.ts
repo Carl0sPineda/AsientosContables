@@ -4,7 +4,7 @@ import {main} from '../models';
 
 export function AddCategory(arg1:string):Promise<void>;
 
-export function AddSeating(arg1:string,arg2:string,arg3:number,arg4:number,arg5:string,arg6:string,arg7:string,arg8:string,arg9:number):Promise<void>;
+export function AddSeating(arg1:string,arg2:number,arg3:number,arg4:string,arg5:string,arg6:string,arg7:string,arg8:number):Promise<void>;
 
 export function DeleteCategory(arg1:number):Promise<void>;
 
@@ -12,7 +12,7 @@ export function DeleteSeating(arg1:number):Promise<void>;
 
 export function EditCategory(arg1:number,arg2:string):Promise<void>;
 
-export function EditSeating(arg1:number,arg2:string,arg3:string,arg4:number,arg5:number,arg6:string,arg7:string,arg8:string,arg9:string,arg10:number):Promise<void>;
+export function EditSeating(arg1:number,arg2:string,arg3:number,arg4:number,arg5:string,arg6:string,arg7:string,arg8:string,arg9:number):Promise<void>;
 
 export function ListCategories():Promise<Array<main.Category>>;
 
