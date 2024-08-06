@@ -1,7 +1,7 @@
 export interface IFormCategory {
-  Name: string;
+  name: string;
 }
 
 export interface ICategory extends IFormCategory {
-  ID: number;
+  id: string;
 }

@@ -1,15 +1,22 @@
+import { ICategory } from "./category.interfaces";
+
 export interface IFormSeating {
-  Description: string;
-  Debit: number;
-  Credit: number;
-  Detail: string;
-  Date: string;
-  NumDoc: string;
-  ASN: string;
-  CategoryID: number;
-  Category: string;
+  description: string;
+  debit?: string;
+  credit?: string;
+  detail: string;
+  date: string;
+  numDoc: string;
+  asn: string;
+  categoryId: number;
 }
 
 export interface ISeating extends IFormSeating {
-  ID: number;
+  id: string;
+  category: ICategory;
+}
+
+export interface ISeatings {
+  totalPages: number;
+  seatings: ISeating[];
 }
