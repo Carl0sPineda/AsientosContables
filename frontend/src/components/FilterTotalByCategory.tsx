@@ -1,4 +1,12 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { getTotalByCategory } from "@/api/services/seating.services";
 import { ITotalByCategory } from "@/interfaces/totals.interfaces";
 import { useAllCategories } from "@/hooks/category/category.query";
@@ -20,10 +28,10 @@ const FilterTotalByCategory = () => {
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
-  const [selectedMonth, setSelectedMonth] = useState<string>("1");
+  const [selectedMonth, setSelectedMonth] = useState<string>("5");
   const [result, setResult] = useState<ITotalByCategory | null>(null);
 
-  const handleTest = async () => {
+  const handleFilter = async () => {
     try {
       const result = await getTotalByCategory(
         selectedCategory,
@@ -37,83 +45,111 @@ const FilterTotalByCategory = () => {
   };
 
   return (
-    <div>
-      <h1>Prueba de getTotalByCategory</h1>
+    <Dialog>
+      <DialogTrigger
+        asChild
+        className="font-bold py-1 px-4 mr-2 rounded-l bg-gray-200 hover:bg-gray-300 text-gray-800 hover:text-gray-900"
+      >
+        <Button>Filtros</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] bg-[#040303] text-zinc-300 border-2 border-slate-800">
+        <DialogHeader>
+          <DialogTitle className="text-center font-bold">
+            Filtrar por código, mes y año
+          </DialogTitle>
+        </DialogHeader>
 
-      <div>
-        <label>
-          Categoría:
-          <Select
-            value={selectedCategory}
-            onValueChange={(value: any) => setSelectedCategory(value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecciona una categoría" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories?.map((category) => (
-                <SelectItem key={category.id} value={category.id}>
-                  {category.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-      </div>
+        <div className="space-y-4">
+          <div>
+            <label>
+              Código
+              <Select
+                value={selectedCategory}
+                onValueChange={(value: any) => setSelectedCategory(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona una categoría" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories?.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </label>
+          </div>
 
-      <div>
-        <label>
-          Mes:
-          <Select
-            value={selectedMonth}
-            onValueChange={(value: any) => setSelectedMonth(value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecciona un mes" />
-            </SelectTrigger>
-            <SelectContent>
-              {months.map((month) => (
-                <SelectItem key={month.id} value={month.id.toString()}>
-                  {month.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-      </div>
+          <div className="flex space-x-4">
+            <div className="flex-1">
+              <label>
+                Mes
+                <Select
+                  value={selectedMonth}
+                  onValueChange={(value: any) => setSelectedMonth(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona un mes" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {months.map((month) => (
+                      <SelectItem key={month.id} value={month.id.toString()}>
+                        {month.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </label>
+            </div>
 
-      <div>
-        <label>
-          Año:
-          <Select
-            value={selectedYear}
-            onValueChange={(value: any) => setSelectedYear(value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecciona un año" />
-            </SelectTrigger>
-            <SelectContent>
-              {years.map((year) => (
-                <SelectItem key={year} value={year}>
-                  {year}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-      </div>
-
-      <button onClick={handleTest}>Probar Método</button>
-
-      {result && (
-        <div>
-          <h2>Resultado:</h2>
-          <div>Credito: {result._sum.credit}</div>
-          <div>Debito: {result._sum.debit}</div>
-          <div>Total: {result.total}</div>
+            <div className="flex-1">
+              <label>
+                Año
+                <Select
+                  value={selectedYear}
+                  onValueChange={(value: any) => setSelectedYear(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona un año" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {years.map((year) => (
+                      <SelectItem key={year} value={year}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </label>
+            </div>
+          </div>
         </div>
-      )}
-    </div>
+
+        <button
+          onClick={handleFilter}
+          className="text-white mb-2 bg-[#1F316F] border-0 py-1 px-6 focus:outline-none hover:bg-[#2E4A9E] rounded text-lg transition-colors duration-300 ease-in-out font-bold"
+        >
+          Filtrar
+        </button>
+
+        {result && (
+          <div className="mb-4 p-4 bg-[#021526] rounded-lg text-white">
+            <div className="mb-2">
+              <span className="font-semibold">Crédito:</span>{" "}
+              {result._sum.credit}
+            </div>
+            <div className="mb-2">
+              <span className="font-semibold">Débito:</span> {result._sum.debit}
+            </div>
+            <div className="mb-2">
+              <span className="font-semibold">Suma de ambos:</span>{" "}
+              {result.total}
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
 

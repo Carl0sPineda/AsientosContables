@@ -1,6 +1,7 @@
 import { useAllSeatings } from "@/hooks/seating/seating.queries";
 import { DateFormat } from "@/lib/dateFormat";
 import { useState } from "react";
+import FilterTotalByCategory from "./FilterTotalByCategory";
 
 const DataTableSeatings = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -19,12 +20,7 @@ const DataTableSeatings = () => {
   return (
     <div className="w-full mx-auto overflow-auto">
       <div className="flex justify-end mb-2">
-        <button
-          className="font-bold py-1 px-4 mr-2 rounded-l bg-gray-200 hover:bg-gray-300 text-gray-800 hover:text-gray-900
-"
-        >
-          Filtros
-        </button>
+        <FilterTotalByCategory />
         <button
           onClick={goToPreviousPage}
           disabled={pageNumber === 1}
