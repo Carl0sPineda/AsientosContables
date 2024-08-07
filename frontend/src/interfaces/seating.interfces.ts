@@ -11,6 +11,10 @@ export interface IFormSeating {
   categoryId: number;
 }
 
+export interface IUpdateSeating extends IFormSeating {
+  id: string;
+}
+
 export interface ISeating extends IFormSeating {
   id: string;
   category: ICategory;
