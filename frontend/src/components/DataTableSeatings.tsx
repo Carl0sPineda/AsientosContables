@@ -2,10 +2,37 @@ import { useAllSeatings } from "@/hooks/seating/seating.queries";
 import { DateFormat } from "@/lib/dateFormat";
 import { useState } from "react";
 import FilterTotalByCategory from "./FilterTotalByCategory";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Button } from "./ui/button";
+import { useDeleteSeating } from "@/hooks/seating/seating.mutations";
+import { toast } from "sonner";
 
 const DataTableSeatings = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const { data: seatingsData } = useAllSeatings(pageNumber);
+  const deleteSeatingMutation = useDeleteSeating();
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteSeatingMutation.mutateAsync(id);
+      toast.success("Datos eliminados correctamente!");
+    } catch (error) {
+      toast.error("Ha ocurrido un error!");
+    }
+  };
 
   const goToNextPage = () => {
     setPageNumber((prevPageNumber) => prevPageNumber + 1);
@@ -83,14 +110,74 @@ const DataTableSeatings = () => {
           {seatingsData && seatingsData?.seatings?.length > 0 ? (
             seatingsData?.seatings.map((seating) => (
               <tr key={seating.id}>
-                <td className="px-4 py-3">{seating.category.name}</td>
-                <td className="px-4 py-3">{seating.description}</td>
-                <td className="px-4 py-3">{seating.credit}</td>
-                <td className="px-4 py-3">{seating.debit}</td>
-                <td className="px-4 py-3">{seating.detail}</td>
-                <td className="px-4 py-3">{DateFormat(seating.date)}</td>
-                <td className="px-4 py-3">{seating.numDoc}</td>
-                <td className="px-4 py-3">{seating.asn}</td>
+                <td className="border-b-2 border-gray-200 px-4 py-3">
+                  {seating.category.name}
+                </td>
+                <td className="border-b-2 border-gray-200 px-4 py-3">
+                  {seating.description}
+                </td>
+                <td className="border-b-2 border-gray-200 px-4 py-3">
+                  {seating.credit}
+                </td>
+                <td className="border-b-2 border-gray-200 px-4 py-3">
+                  {seating.debit}
+                </td>
+                <td className="border-b-2 border-gray-200 px-4 py-3">
+                  {seating.detail}
+                </td>
+                <td className="border-b-2 border-gray-200 px-4 py-3">
+                  {DateFormat(seating.date)}
+                </td>
+                <td className="border-b-2 border-gray-200 px-4 py-3">
+                  {seating.numDoc}
+                </td>
+                <td className="border-b-2 border-gray-200 px-4 py-3">
+                  {seating.asn}
+                </td>
+                <td className="border-b-2 border-gray-200 px-4 py-3">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild className="ml-2">
+                      <Button
+                        aria-label="Acciones"
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        <DotsHorizontalIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>
+                        Acciones para {seating.category.name}
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        {/* <EditAccountModal accountId={account} /> */}
+
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
+                            Eliminar fila
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuLabel>
+                                Estás seguro de eliminar?
+                              </DropdownMenuLabel>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem className="focus:bg-gray-800 focus:text-white">
+                                No, cancelar
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(seating.id)}
+                                className="focus:bg-red-800 focus:text-white"
+                              >
+                                Si, continuar
+                              </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </td>
               </tr>
             ))
           ) : (

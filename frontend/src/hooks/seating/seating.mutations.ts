@@ -1,5 +1,5 @@
-// import { addSeating } from "@/api/seating.services";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteSeating } from "@/api/services/seating.services";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // const useAddSeating = () => {
 //   const queryClient = useQueryClient();
@@ -11,6 +11,14 @@
 //   });
 // };
 
-// export { useAddSeating };
+const useDeleteSeating = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteSeating,
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["seatings"] });
+    },
+  });
+};
 
-export const f = 55;
+export { useDeleteSeating };

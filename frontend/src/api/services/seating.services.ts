@@ -44,3 +44,11 @@ export const getAllseatings = async (page: number): Promise<ISeatings> => {
     throw new Error("Error al obtener monto total de categorias");
   }
 };
+
+export const deleteSeating = async (id: string): Promise<void> => {
+  try {
+    await axiosInstance.delete(`seating/${id}`);
+  } catch (error) {
+    throw new Error("Failed to delete seating");
+  }
+};

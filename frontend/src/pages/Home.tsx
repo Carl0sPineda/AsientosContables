@@ -1,4 +1,3 @@
-import FilterTotalByCategory from "@/components/FilterTotalByCategory";
 import AddSeatingModal from "../components/AddSeatingModal";
 import DataTableSeatings from "../components/DataTableSeatings";
 
@@ -22,10 +21,7 @@ const Home = () => {
         </span>
       </h1>
       <AddSeatingModal />
-
       <DataTableSeatings />
-
-      <FilterTotalByCategory />
     </main>
   );
 };
