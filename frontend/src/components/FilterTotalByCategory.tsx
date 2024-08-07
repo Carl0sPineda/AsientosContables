@@ -18,6 +18,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { currencyFormatter } from "@/lib/currencyFormater";
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 6 }, (_, i) => (currentYear - i).toString());
@@ -136,15 +137,19 @@ const FilterTotalByCategory = () => {
         {result && (
           <div className="mb-4 p-4 bg-[#021526] rounded-lg text-white">
             <div className="mb-2">
-              <span className="font-semibold">Crédito:</span>{" "}
-              {result._sum.credit}
+              <span className="font-semibold">
+                Crédito: {currencyFormatter(result._sum.credit)}
+              </span>
             </div>
             <div className="mb-2">
-              <span className="font-semibold">Débito:</span> {result._sum.debit}
+              <span className="font-semibold">
+                Débito: {currencyFormatter(result._sum.debit)}
+              </span>
             </div>
             <div className="mb-2">
-              <span className="font-semibold">Suma de ambos:</span>{" "}
-              {result.total}
+              <span className="font-semibold">
+                Total de ambos: {currencyFormatter(result.total)}
+              </span>
             </div>
           </div>
         )}

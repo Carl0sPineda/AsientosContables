@@ -19,6 +19,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
 import { useDeleteSeating } from "@/hooks/seating/seating.mutations";
 import { toast } from "sonner";
+import { currencyFormatter } from "@/lib/currencyFormater";
 
 const DataTableSeatings = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -117,10 +118,10 @@ const DataTableSeatings = () => {
                   {seating.description}
                 </td>
                 <td className="border-b-2 border-gray-200 px-4 py-3">
-                  {seating.credit}
+                  {currencyFormatter(seating.credit)}
                 </td>
                 <td className="border-b-2 border-gray-200 px-4 py-3">
-                  {seating.debit}
+                  {currencyFormatter(seating.debit)}
                 </td>
                 <td className="border-b-2 border-gray-200 px-4 py-3">
                   {seating.detail}
