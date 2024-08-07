@@ -1,9 +1,9 @@
-export interface TotalByCategory {
-  _sum: Sum;
+export interface ITotalByCategory {
+  _sum: ISum;
   total: number;
 }
 
-export interface Sum {
+export interface ISum {
   debit: number;
   credit: number;
 }

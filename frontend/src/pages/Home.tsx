@@ -1,6 +1,10 @@
+import FilterTotalByCategory from "@/components/FilterTotalByCategory";
+import AddSeatingModal from "../components/AddSeatingModal";
+import DataTableSeatings from "../components/DataTableSeatings";
+
 const Home = () => {
   return (
-    <main className="mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-26">
+    <main className="mx-auto min-h-dvh px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-26">
       <h1 className="mx-auto max-w-4xl mb-7 font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">
         <span className="inline-block">
           Asientos
@@ -17,6 +21,11 @@ const Home = () => {
           </span>
         </span>
       </h1>
+      <AddSeatingModal />
+
+      <DataTableSeatings />
+
+      <FilterTotalByCategory />
     </main>
   );
 };
