@@ -56,7 +56,7 @@ const DataTableSeatings = () => {
             pageNumber === 1
               ? "bg-gray-300 text-gray-500 cursor-not-allowed"
               : "bg-gray-200 hover:bg-gray-300 text-gray-800 hover:text-gray-900"
-          } font-bold py-1 px-4 mr-2 rounded-l`}
+          } py-1 px-4 mr-2 rounded-l`}
         >
           Anterior
         </button>
@@ -70,7 +70,7 @@ const DataTableSeatings = () => {
             pageNumber === seatingsData?.totalPages
               ? "bg-gray-300 text-gray-500 cursor-not-allowed"
               : "bg-gray-200 hover:bg-gray-300 text-gray-800 hover:text-gray-900"
-          } font-bold py-1 px-4 ml-2 rounded-r`}
+          } py-1 px-4 ml-2 rounded-r`}
         >
           Siguiente
         </button>
@@ -110,29 +110,32 @@ const DataTableSeatings = () => {
         <tbody>
           {seatingsData && seatingsData?.seatings?.length > 0 ? (
             seatingsData?.seatings.map((seating) => (
-              <tr key={seating.id}>
-                <td className="border-b-2 border-gray-200 px-4 py-3">
+              <tr
+                key={seating.id}
+                className="hover:bg-zinc-100 transition-colors duration-300 ease-in-out"
+              >
+                <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                   {seating.category.name}
                 </td>
-                <td className="border-b-2 border-gray-200 px-4 py-3">
+                <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                   {seating.description}
                 </td>
-                <td className="border-b-2 border-gray-200 px-4 py-3">
+                <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                   {currencyFormatter(seating.credit)}
                 </td>
-                <td className="border-b-2 border-gray-200 px-4 py-3">
+                <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                   {currencyFormatter(seating.debit)}
                 </td>
-                <td className="border-b-2 border-gray-200 px-4 py-3">
+                <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                   {seating.detail}
                 </td>
-                <td className="border-b-2 border-gray-200 px-4 py-3">
+                <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                   {DateFormat(seating.date)}
                 </td>
-                <td className="border-b-2 border-gray-200 px-4 py-3">
+                <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                   {seating.numDoc}
                 </td>
-                <td className="border-b-2 border-gray-200 px-4 py-3">
+                <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                   {seating.asn}
                 </td>
                 <td className="border-b-2 border-gray-200 px-4 py-3">

@@ -13,7 +13,7 @@ const FormCategory = () => {
       reset();
       toast.success("Datos agregados correctamente!");
     } catch (error) {
-      toast.error("Ha ocurrido un error!");
+      toast.error("Este código ya existe, agrega otro!");
     }
   };
 

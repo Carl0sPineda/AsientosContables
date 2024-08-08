@@ -49,7 +49,7 @@ const FilterTotalByCategory = () => {
     <Dialog>
       <DialogTrigger
         asChild
-        className="font-bold py-1 px-4 mr-2 rounded-l bg-gray-200 hover:bg-gray-300 text-gray-800 hover:text-gray-900"
+        className="py-1 px-4 mr-2 rounded-l bg-gray-200 hover:bg-gray-300 text-gray-800 hover:text-gray-900"
       >
         <Button>Filtros</Button>
       </DialogTrigger>

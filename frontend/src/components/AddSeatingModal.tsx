@@ -69,7 +69,7 @@ const AddSeatingModal = () => {
               {...register("categoryId")}
               defaultValue=""
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-          focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
             >
               <option value="" disabled>
                 Selecciona un código
@@ -86,14 +86,14 @@ const AddSeatingModal = () => {
             {...register("description")}
             placeholder="Descripción"
             autoComplete="off"
-            className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-blue-500 focus:border-blue-500 focus:ring-2 placeholder-gray-600"
+            className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
           />
           <input
             type="text"
             {...register("detail")}
             placeholder="Detalle"
             autoComplete="off"
-            className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-blue-500 focus:border-blue-500 focus:ring-2 placeholder-gray-600"
+            className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
           />
           <div className="flex gap-2 w-full">
             <input
@@ -101,7 +101,7 @@ const AddSeatingModal = () => {
               {...register("debit")}
               placeholder="Débito"
               autoComplete="off"
-              className="w-1/2 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-blue-500 focus:border-blue-500 focus:ring-2 placeholder-gray-600"
+              className="w-1/2 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
             />
 
             <input
@@ -109,7 +109,7 @@ const AddSeatingModal = () => {
               {...register("credit")}
               placeholder="Crédito"
               autoComplete="off"
-              className="w-1/2 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-blue-500 focus:border-blue-500 focus:ring-2 placeholder-gray-600"
+              className="w-1/2 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
             />
           </div>
           <div className="flex items-center justify-between gap-2 w-full">
@@ -118,14 +118,14 @@ const AddSeatingModal = () => {
               {...register("numDoc")}
               placeholder="Ingrese num.Doc"
               autoComplete="off"
-              className="w-1/3 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-blue-500 focus:border-blue-500 focus:ring-2 placeholder-gray-600"
+              className="w-1/3 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
             />
 
             <input
               type="date"
               {...register("date")}
               autoComplete="off"
-              className="w-1/3 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-blue-500 focus:border-blue-500 focus:ring-2 placeholder-gray-950"
+              className="w-1/3 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-950"
             />
 
             <input
@@ -133,7 +133,7 @@ const AddSeatingModal = () => {
               {...register("asn")}
               placeholder="ASN"
               autoComplete="off"
-              className="w-1/3 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-blue-500 focus:border-blue-500 focus:ring-2 placeholder-gray-600"
+              className="w-1/3 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
             />
           </div>
           <button className="bg-[#285430] w-full px-4 py-2 mt-4 text-gray-200 rounded">
