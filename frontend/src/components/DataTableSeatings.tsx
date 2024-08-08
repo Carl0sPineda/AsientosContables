@@ -1,7 +1,6 @@
 import { useAllSeatings } from "@/hooks/seating/seating.queries";
 import { DateFormat } from "@/lib/dateFormat";
 import { useState } from "react";
-import FilterTotalByCategory from "./FilterTotalByCategory";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,7 +47,6 @@ const DataTableSeatings = () => {
   return (
     <div className="w-full mx-auto overflow-auto">
       <div className="flex justify-end mb-2">
-        <FilterTotalByCategory />
         <button
           onClick={goToPreviousPage}
           disabled={pageNumber === 1}
