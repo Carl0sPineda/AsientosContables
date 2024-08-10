@@ -13,6 +13,8 @@ import {
 import { currencyFormatter } from "@/lib/currencyFormater";
 import { DateFormat } from "@/lib/dateFormat";
 import { DownloadIcon } from "@radix-ui/react-icons";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 6 }, (_, i) => (currentYear - i).toString());
@@ -37,6 +39,121 @@ const FilterTotalByCategory = () => {
     } catch (error: any) {
       setResult(null);
     }
+  };
+
+  const handleGeneratePDF = () => {
+    if (!result) return;
+
+    const doc = new jsPDF();
+    const margin = 20; // Margen general para los bordes
+    const rowHeight = 10; // Altura de la fila de la tabla
+    const headerHeight = 10; // Altura del encabezado de la tabla (puede ajustarse si es necesario)
+
+    // Set the title
+    doc.setFontSize(15);
+    const title = "Resumen de Asientos por código";
+    const titleWidth = doc.getTextWidth(title);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const titleX = (pageWidth - titleWidth) / 2;
+
+    doc.text(title, titleX, margin); // Posición del título
+
+    // Prepare table data
+    const tableColumn = [
+      "Código/CTA",
+      "Descripción",
+      "Crédito",
+      "Débito",
+      "Detalle/Asiento",
+      "Fecha",
+      "Num./Doc",
+      "ASN",
+    ];
+
+    const tableRows = result.seatings.map((seating) => [
+      seating.category.name,
+      seating.description,
+      currencyFormatter(seating.credit).replace("₡", ""), // Remove '₡'
+      currencyFormatter(seating.debit).replace("₡", ""), // Remove '₡'
+      seating.detail,
+      DateFormat(seating.date),
+      seating.numDoc,
+      seating.asn,
+    ]);
+
+    // Genera la tabla
+    const startY = margin + 10; // Empieza la tabla justo debajo del título
+    autoTable(doc, {
+      startY: startY,
+      head: [tableColumn],
+      body: tableRows,
+      styles: {
+        fontSize: 7,
+        cellPadding: 1,
+        overflow: "linebreak",
+      },
+      margin: { left: 10, right: 10 },
+      theme: "striped",
+      didDrawPage: function (data) {
+        // Calcula la altura total de la tabla
+        const numRows = result.seatings.length;
+        const tableHeight = numRows * rowHeight + headerHeight;
+
+        // Posiciona los totales justo después de la tabla, sin espacio extra
+        doc.setFontSize(8); // Tamaño de fuente más pequeño para los totales
+        const totalsY = startY + tableHeight; // Posiciona los totales justo después de la tabla
+
+        // Dibuja una línea justo encima del texto de los totales
+        doc.setLineWidth(0.2); // Línea más delgada
+        doc.line(
+          margin,
+          totalsY - 2, // Posiciona la línea muy cerca del texto de los totales
+          pageWidth - margin,
+          totalsY - 2
+        );
+
+        // Define los textos para los totales
+        const subtotalCreditText = `Subtotal Crédito: ${currencyFormatter(
+          result._sum.credit
+        ).replace("₡", "")}`;
+        const subtotalDebitText = `Subtotal Débito: ${currencyFormatter(
+          result._sum.debit
+        ).replace("₡", "")}`;
+        const totalBothText = `Balance Total: ${currencyFormatter(
+          result.total
+        ).replace("₡", "")}`;
+
+        // Calcula el ancho de cada texto
+        const textWidths = [
+          doc.getTextWidth(subtotalCreditText),
+          doc.getTextWidth(subtotalDebitText),
+          doc.getTextWidth(totalBothText),
+        ];
+
+        // Calcula el espacio total requerido para los textos
+        const totalTextWidth = textWidths.reduce((a, b) => a + b, 0);
+        const spaceBetweenTexts = 10; // Espacio entre los textos
+
+        // Calcula el espacio disponible para los textos
+        const availableWidth = pageWidth - 2 * margin;
+        const startingX =
+          (availableWidth - totalTextWidth - 2 * spaceBetweenTexts) / 2 +
+          margin;
+
+        // Posiciones X para los textos
+        let currentX = startingX;
+
+        // Dibuja los textos en una sola línea
+        doc.text(subtotalCreditText, currentX, totalsY + 2); // Ajusta la posición Y para que esté justo al lado de la línea
+        currentX += textWidths[0] + spaceBetweenTexts;
+        doc.text(subtotalDebitText, currentX, totalsY + 2);
+        currentX += textWidths[1] + spaceBetweenTexts;
+        doc.text(totalBothText, currentX, totalsY + 2);
+      },
+    });
+
+    // Guarda el PDF
+    doc.save("resumen_asiento.pdf");
   };
 
   return (
@@ -132,7 +249,10 @@ const FilterTotalByCategory = () => {
                 <span>{currencyFormatter(result.total)}</span>
               </div>
             </div>
-            <button className="bg-[#C80036] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#f60842] transition-colors duration-300 ease-in-out font-bold flex items-center">
+            <button
+              onClick={handleGeneratePDF}
+              className="bg-[#C80036] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#f60842] transition-colors duration-300 ease-in-out font-bold flex items-center"
+            >
               Generar PDF
               <DownloadIcon className="ml-2 font-bold" />
             </button>
