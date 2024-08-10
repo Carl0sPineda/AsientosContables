@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { currencyFormatter } from "@/lib/currencyFormater";
 import { DateFormat } from "@/lib/dateFormat";
-import { useLocation } from "react-router-dom";
+import { DownloadIcon } from "@radix-ui/react-icons";
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 6 }, (_, i) => (currentYear - i).toString());
@@ -117,21 +117,28 @@ const FilterTotalByCategory = () => {
 
       <div className="mb-4 p-4">
         {result && (
-          <div className="flex space-x-4">
-            <div className="flex items-center">
-              <span className="font-semibold mr-2">Crédito:</span>
-              <span>{currencyFormatter(result._sum.credit)}</span>
+          <div className="flex justify-between items-center space-x-4">
+            <div className="flex space-x-4">
+              <div className="flex items-center">
+                <span className="font-semibold mr-2">Crédito:</span>
+                <span>{currencyFormatter(result._sum.credit)}</span>
+              </div>
+              <div className="flex items-center">
+                <span className="font-semibold mr-2">Débito:</span>
+                <span>{currencyFormatter(result._sum.debit)}</span>
+              </div>
+              <div className="flex items-center">
+                <span className="font-semibold mr-2">Total de ambos:</span>
+                <span>{currencyFormatter(result.total)}</span>
+              </div>
             </div>
-            <div className="flex items-center">
-              <span className="font-semibold mr-2">Débito:</span>
-              <span>{currencyFormatter(result._sum.debit)}</span>
-            </div>
-            <div className="flex items-center">
-              <span className="font-semibold mr-2">Total de ambos:</span>
-              <span>{currencyFormatter(result.total)}</span>
-            </div>
+            <button className="bg-[#C80036] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#f60842] transition-colors duration-300 ease-in-out font-bold flex items-center">
+              Generar PDF
+              <DownloadIcon className="ml-2 font-bold" />
+            </button>
           </div>
         )}
+
         <table className="table-auto w-full text-left whitespace-no-wrap">
           <thead>
             <tr>
