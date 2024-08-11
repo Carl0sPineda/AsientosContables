@@ -15,6 +15,7 @@ import { DateFormat } from "@/lib/dateFormat";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import dayjs from "dayjs";
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 6 }, (_, i) => (currentYear - i).toString());
@@ -27,6 +28,12 @@ const FilterTotalByCategory = () => {
   );
   const [selectedMonth, setSelectedMonth] = useState<string>("5");
   const [result, setResult] = useState<ITotalByCategory | null>(null);
+
+  const truncateText = (text: string, maxLength: number): string => {
+    return text.length > maxLength
+      ? `${text.substring(0, maxLength)}...`
+      : text;
+  };
 
   const handleFilter = async () => {
     try {
@@ -42,23 +49,24 @@ const FilterTotalByCategory = () => {
   };
 
   const handleGeneratePDF = () => {
-    if (!result) return;
+    if (!result || result.seatings.length === 0) return;
 
     const doc = new jsPDF();
-    const margin = 20; // Margen general para los bordes
-    const rowHeight = 10; // Altura de la fila de la tabla
-    const headerHeight = 10; // Altura del encabezado de la tabla (puede ajustarse si es necesario)
+    const margin = 20;
+    const rowHeight = 10;
+    const headerHeight = 10;
 
-    // Set the title
+    const firstSeatingDate = result.seatings[0].date;
+    const monthYear = dayjs(firstSeatingDate).format("MMMM YYYY");
+
     doc.setFontSize(15);
-    const title = "Resumen de Asientos por código";
+    const title = `Resumen de asiento - ${monthYear}`;
     const titleWidth = doc.getTextWidth(title);
     const pageWidth = doc.internal.pageSize.getWidth();
     const titleX = (pageWidth - titleWidth) / 2;
 
-    doc.text(title, titleX, margin); // Posición del título
+    doc.text(title, titleX, margin);
 
-    // Prepare table data
     const tableColumn = [
       "Código/CTA",
       "Descripción",
@@ -72,19 +80,23 @@ const FilterTotalByCategory = () => {
 
     const tableRows = result.seatings.map((seating) => [
       seating.category.name,
-      seating.description,
-      currencyFormatter(seating.credit).replace("₡", ""), // Remove '₡'
-      currencyFormatter(seating.debit).replace("₡", ""), // Remove '₡'
-      seating.detail,
+      truncateText(seating.description, 32),
+      seating.credit === "0"
+        ? ""
+        : currencyFormatter(seating.credit).replace("₡", ""),
+      seating.debit === "0"
+        ? ""
+        : currencyFormatter(seating.debit).replace("₡", ""),
+      truncateText(seating.detail, 32),
       DateFormat(seating.date),
       seating.numDoc,
       seating.asn,
     ]);
 
-    // Genera la tabla
-    const startY = margin + 10; // Empieza la tabla justo debajo del título
+    let finalY = 0;
+
     autoTable(doc, {
-      startY: startY,
+      startY: margin + 10,
       head: [tableColumn],
       body: tableRows,
       styles: {
@@ -95,65 +107,60 @@ const FilterTotalByCategory = () => {
       margin: { left: 10, right: 10 },
       theme: "striped",
       didDrawPage: function (data) {
-        // Calcula la altura total de la tabla
-        const numRows = result.seatings.length;
-        const tableHeight = numRows * rowHeight + headerHeight;
-
-        // Posiciona los totales justo después de la tabla, sin espacio extra
-        doc.setFontSize(8); // Tamaño de fuente más pequeño para los totales
-        const totalsY = startY + tableHeight; // Posiciona los totales justo después de la tabla
-
-        // Dibuja una línea justo encima del texto de los totales
-        doc.setLineWidth(0.2); // Línea más delgada
-        doc.line(
-          margin,
-          totalsY - 2, // Posiciona la línea muy cerca del texto de los totales
-          pageWidth - margin,
-          totalsY - 2
-        );
-
-        // Define los textos para los totales
-        const subtotalCreditText = `Subtotal Crédito: ${currencyFormatter(
-          result._sum.credit
-        ).replace("₡", "")}`;
-        const subtotalDebitText = `Subtotal Débito: ${currencyFormatter(
-          result._sum.debit
-        ).replace("₡", "")}`;
-        const totalBothText = `Balance Total: ${currencyFormatter(
-          result.total
-        ).replace("₡", "")}`;
-
-        // Calcula el ancho de cada texto
-        const textWidths = [
-          doc.getTextWidth(subtotalCreditText),
-          doc.getTextWidth(subtotalDebitText),
-          doc.getTextWidth(totalBothText),
-        ];
-
-        // Calcula el espacio total requerido para los textos
-        const totalTextWidth = textWidths.reduce((a, b) => a + b, 0);
-        const spaceBetweenTexts = 10; // Espacio entre los textos
-
-        // Calcula el espacio disponible para los textos
-        const availableWidth = pageWidth - 2 * margin;
-        const startingX =
-          (availableWidth - totalTextWidth - 2 * spaceBetweenTexts) / 2 +
-          margin;
-
-        // Posiciones X para los textos
-        let currentX = startingX;
-
-        // Dibuja los textos en una sola línea
-        doc.text(subtotalCreditText, currentX, totalsY + 2); // Ajusta la posición Y para que esté justo al lado de la línea
-        currentX += textWidths[0] + spaceBetweenTexts;
-        doc.text(subtotalDebitText, currentX, totalsY + 2);
-        currentX += textWidths[1] + spaceBetweenTexts;
-        doc.text(totalBothText, currentX, totalsY + 2);
+        if (data.cursor && data.cursor.y !== undefined) {
+          finalY = data.cursor.y; // Guarda la posición Y final de la tabla
+        } else {
+          finalY = margin; // Si no existe 'data.cursor', usa el margen inicial
+        }
       },
     });
 
-    // Guarda el PDF
-    doc.save("resumen_asiento.pdf");
+    // Añadir margen superior de 8 unidades
+    finalY += 8;
+
+    doc.setFontSize(8);
+    doc.setLineWidth(0.2);
+
+    const subtotalCreditText = `Subtotal Crédito: ${currencyFormatter(
+      result._sum.credit
+    ).replace("₡", "")}`;
+    const subtotalDebitText = `Subtotal Débito: ${currencyFormatter(
+      result._sum.debit
+    ).replace("₡", "")}`;
+    const totalBothText = `Balance Total: ${currencyFormatter(
+      result.total
+    ).replace("₡", "")}`;
+
+    const textWidths = [
+      doc.getTextWidth(subtotalCreditText),
+      doc.getTextWidth(subtotalDebitText),
+      doc.getTextWidth(totalBothText),
+    ];
+
+    const totalTextWidth = textWidths.reduce((a, b) => a + b, 0);
+    const spaceBetweenTexts = 10;
+    const availableWidth = pageWidth - 2 * margin;
+    const startingX =
+      (availableWidth - totalTextWidth - 2 * spaceBetweenTexts) / 2 + margin;
+
+    let currentX = startingX;
+
+    // Asegúrate de que los totales estén en la última página y justo después de la tabla
+    if (finalY + rowHeight > doc.internal.pageSize.getHeight() - margin) {
+      doc.addPage();
+      finalY = margin + 8; // Añadir el margen superior en la nueva página
+    }
+
+    // Dibuja los totales en la última página
+    doc.line(margin, finalY - 2, pageWidth - margin, finalY - 2);
+
+    doc.text(subtotalCreditText, currentX, finalY + 2);
+    currentX += textWidths[0] + spaceBetweenTexts;
+    doc.text(subtotalDebitText, currentX, finalY + 2);
+    currentX += textWidths[1] + spaceBetweenTexts;
+    doc.text(totalBothText, currentX, finalY + 2);
+
+    doc.save(`resumen_asiento_${monthYear}.pdf`);
   };
 
   return (
@@ -299,16 +306,20 @@ const FilterTotalByCategory = () => {
                     {seating.category.name}
                   </td>
                   <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
-                    {seating.description}
+                    {truncateText(seating.description, 25)}
                   </td>
                   <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
-                    {currencyFormatter(seating.credit)}
+                    {seating.credit === "0"
+                      ? ""
+                      : currencyFormatter(seating.credit)}
                   </td>
                   <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
-                    {currencyFormatter(seating.debit)}
+                    {seating.debit === "0"
+                      ? ""
+                      : currencyFormatter(seating.debit)}
                   </td>
                   <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
-                    {seating.detail}
+                    {truncateText(seating.detail, 25)}
                   </td>
                   <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                     {DateFormat(seating.date)}

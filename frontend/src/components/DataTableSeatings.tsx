@@ -119,10 +119,14 @@ const DataTableSeatings = () => {
                   {seating.description}
                 </td>
                 <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
-                  {currencyFormatter(seating.credit)}
+                  {seating.credit === "0"
+                    ? ""
+                    : currencyFormatter(seating.credit)}
                 </td>
                 <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
-                  {currencyFormatter(seating.debit)}
+                  {seating.debit === "0"
+                    ? ""
+                    : currencyFormatter(seating.debit)}
                 </td>
                 <td className="border-b-2 border-gray-200 px-4 py-3 text-sm">
                   {seating.detail}
