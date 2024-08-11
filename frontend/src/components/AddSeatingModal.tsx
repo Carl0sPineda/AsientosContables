@@ -65,11 +65,15 @@ const AddSeatingModal = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="w-full">
+            <label htmlFor="categoryId" className="block text-zinc-200">
+              Código
+            </label>
             <select
+              id="categoryId"
               {...register("categoryId")}
               defaultValue=""
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-          focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+      focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
             >
               <option value="" disabled>
                 Selecciona un código
@@ -82,60 +86,106 @@ const AddSeatingModal = () => {
             </select>
           </div>
 
-          <textarea
-            {...register("description")}
-            placeholder="Descripción"
-            autoComplete="off"
-            className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
-          />
-          <input
-            type="text"
-            {...register("detail")}
-            placeholder="Detalle"
-            autoComplete="off"
-            className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
-          />
-          <div className="flex gap-2 w-full">
-            <input
-              type="number"
-              {...register("debit")}
-              placeholder="Débito"
+          <div className="w-full mt-2">
+            <label htmlFor="description" className="block text-zinc-200">
+              Descripción
+            </label>
+            <textarea
+              id="description"
+              {...register("description")}
+              placeholder="Ingrese una descripción"
               autoComplete="off"
-              className="w-1/2 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
-            />
-
-            <input
-              type="number"
-              {...register("credit")}
-              placeholder="Crédito"
-              autoComplete="off"
-              className="w-1/2 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+              className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
             />
           </div>
-          <div className="flex items-center justify-between gap-2 w-full">
-            <input
-              type="text"
-              {...register("numDoc")}
-              placeholder="Ingrese num.Doc"
-              autoComplete="off"
-              className="w-1/3 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
-            />
 
+          <div className="w-full mt-2">
+            <label htmlFor="detail" className="block text-zinc-200">
+              Detalle
+            </label>
             <input
-              type="date"
-              {...register("date")}
-              autoComplete="off"
-              className="w-1/3 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-950"
-            />
-
-            <input
+              id="detail"
               type="text"
-              {...register("asn")}
-              placeholder="ASN"
+              {...register("detail")}
+              placeholder="Ingrese el detalle"
               autoComplete="off"
-              className="w-1/3 bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 mt-2 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+              className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
             />
           </div>
+
+          <div className="flex gap-2 w-full mt-2">
+            <div className="w-1/2">
+              <label htmlFor="debit" className="block text-zinc-200">
+                Débito
+              </label>
+              <input
+                id="debit"
+                type="text"
+                {...register("debit")}
+                placeholder="Ingrese el débito"
+                autoComplete="off"
+                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+              />
+            </div>
+
+            <div className="w-1/2">
+              <label htmlFor="credit" className="block text-zinc-200">
+                Crédito
+              </label>
+              <input
+                id="credit"
+                type="text"
+                {...register("credit")}
+                placeholder="Ingrese el crédito"
+                autoComplete="off"
+                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-2 w-full mt-2">
+            <div className="w-1/3">
+              <label htmlFor="numDoc" className="block text-zinc-200">
+                Num./Doc
+              </label>
+              <input
+                id="numDoc"
+                type="text"
+                {...register("numDoc")}
+                placeholder="Ingrese num.Doc"
+                autoComplete="off"
+                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+              />
+            </div>
+
+            <div className="w-1/3">
+              <label htmlFor="date" className="block text-zinc-200">
+                Fecha
+              </label>
+              <input
+                id="date"
+                type="date"
+                {...register("date")}
+                autoComplete="off"
+                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-950"
+              />
+            </div>
+
+            <div className="w-1/3">
+              <label htmlFor="asn" className="block text-zinc-200">
+                ASN
+              </label>
+              <input
+                id="asn"
+                type="text"
+                {...register("asn")}
+                placeholder="Ingrese el ASN"
+                autoComplete="off"
+                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+              />
+            </div>
+          </div>
+
           <button className="bg-[#285430] w-full px-4 py-2 mt-4 text-gray-200 rounded">
             Guardar
           </button>
