@@ -8,7 +8,7 @@ export interface IFormSeating {
   date: string;
   numDoc: string;
   asn: string;
-  categoryId: number;
+  categoryId: string;
 }
 
 export interface IUpdateSeating extends IFormSeating {

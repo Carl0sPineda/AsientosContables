@@ -16,6 +16,9 @@ import { toast } from "sonner";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { schemaAddSeating } from "@/interfaces/seating.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { cn } from "@/lib/utils";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -23,7 +26,14 @@ dayjs.extend(timezone);
 const AddSeatingModal = () => {
   const [open, setOpen] = useState<boolean>(false);
   const { data: categories } = useAllCategories();
-  const { register, handleSubmit, reset, setValue } = useForm<IFormSeating>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<IFormSeating>({
+    resolver: zodResolver(schemaAddSeating),
+  });
   const addSeatingMutation = useAddSeating();
 
   const onSubmit = async (data: IFormSeating) => {
@@ -72,8 +82,10 @@ const AddSeatingModal = () => {
               id="categoryId"
               {...register("categoryId")}
               defaultValue=""
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-      focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+              className={cn(
+                "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5",
+                { "border-red-400": errors.categoryId }
+              )}
             >
               <option value="" disabled>
                 Selecciona un código
@@ -84,6 +96,12 @@ const AddSeatingModal = () => {
                 </option>
               ))}
             </select>
+
+            {errors.categoryId && (
+              <span className="text-red-400 text-sm mt-1">
+                {errors.categoryId.message}
+              </span>
+            )}
           </div>
 
           <div className="w-full mt-2">
@@ -95,8 +113,16 @@ const AddSeatingModal = () => {
               {...register("description")}
               placeholder="Ingrese una descripción"
               autoComplete="off"
-              className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+              className={cn(
+                "w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600",
+                { "border-red-400": errors.description }
+              )}
             />
+            {errors.description && (
+              <span className="text-red-400 text-sm">
+                {errors.description.message}
+              </span>
+            )}
           </div>
 
           <div className="w-full mt-2">
@@ -109,8 +135,16 @@ const AddSeatingModal = () => {
               {...register("detail")}
               placeholder="Ingrese el detalle"
               autoComplete="off"
-              className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+              className={cn(
+                "w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600",
+                { "border-red-400": errors.detail }
+              )}
             />
+            {errors.detail && (
+              <span className="text-red-400 text-sm">
+                {errors.detail.message}
+              </span>
+            )}
           </div>
 
           <div className="flex gap-2 w-full mt-2">
@@ -124,8 +158,16 @@ const AddSeatingModal = () => {
                 {...register("debit")}
                 placeholder="Ingrese el débito"
                 autoComplete="off"
-                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+                className={cn(
+                  "w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600",
+                  { "border-red-400": errors.debit }
+                )}
               />
+              {errors.debit && (
+                <span className="text-red-400 text-sm mt-1">
+                  {errors.debit.message}
+                </span>
+              )}
             </div>
 
             <div className="w-1/2">
@@ -138,8 +180,16 @@ const AddSeatingModal = () => {
                 {...register("credit")}
                 placeholder="Ingrese el crédito"
                 autoComplete="off"
-                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+                className={cn(
+                  "w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600",
+                  { "border-red-400": errors.credit }
+                )}
               />
+              {errors.credit && (
+                <span className="text-red-400 text-sm mt-1">
+                  {errors.credit.message}
+                </span>
+              )}
             </div>
           </div>
 
@@ -154,8 +204,14 @@ const AddSeatingModal = () => {
                 {...register("numDoc")}
                 placeholder="Ingrese num.Doc"
                 autoComplete="off"
-                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+                className={cn(
+                  "w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600",
+                  { "border-red-400": errors.numDoc }
+                )}
               />
+              <span className="text-red-400 text-sm min-h-[1.25rem] block">
+                {errors.numDoc?.message}
+              </span>
             </div>
 
             <div className="w-1/3">
@@ -167,8 +223,14 @@ const AddSeatingModal = () => {
                 type="date"
                 {...register("date")}
                 autoComplete="off"
-                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-950"
+                className={cn(
+                  "w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-950",
+                  { "border-red-400": errors.date }
+                )}
               />
+              <span className="text-red-400 text-sm min-h-[1.25rem] block">
+                {errors.date?.message}
+              </span>
             </div>
 
             <div className="w-1/3">
@@ -181,12 +243,18 @@ const AddSeatingModal = () => {
                 {...register("asn")}
                 placeholder="Ingrese el ASN"
                 autoComplete="off"
-                className="w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600"
+                className={cn(
+                  "w-full bg-gray-50 border border-gray-300 rounded text-gray-900 py-2 px-3 leading-8 focus:ring-green-500 focus:border-green-500 focus:ring-2 placeholder-gray-600",
+                  { "border-red-400": errors.asn }
+                )}
               />
+              <span className="text-red-400 text-sm min-h-[1.25rem] block">
+                {errors.asn?.message}
+              </span>
             </div>
           </div>
 
-          <button className="bg-[#285430] w-full px-4 py-2 mt-4 text-gray-200 rounded">
+          <button className="bg-[#285430] font-bold transition-colors duration-300 ease-in-out hover:bg-[#224529] w-full px-4 py-2 mt-4 text-gray-200 rounded">
             Guardar
           </button>
         </form>
